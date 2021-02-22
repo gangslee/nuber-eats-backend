@@ -8,6 +8,7 @@ import { CoreEntity } from "src/common/entities/core.entity";
 import { BeforeInsert, Column, Entity } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { InternalServerErrorException } from "@nestjs/common";
+import { IsEmail, IsEnum, IsString } from "class-validator";
 // bcrypt : hash, hash를 확인하는 기능을 제공하는 라이브러리
 
 enum UserRole {
@@ -25,6 +26,7 @@ registerEnumType(UserRole, { name: "UserRole" });
 export class User extends CoreEntity {
   @Column()
   @Field((type) => String)
+  @IsEmail()
   email: string;
 
   @Column()
@@ -33,6 +35,7 @@ export class User extends CoreEntity {
 
   @Column({ type: "enum", enum: UserRole })
   @Field((type) => UserRole)
+  @IsEnum(UserRole)
   role: UserRole;
 
   // BeforeInsert Decorater : listener의 한 종류 Insert되기 전에 하단에 mark한 method 실행
