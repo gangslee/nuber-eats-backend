@@ -5,7 +5,10 @@ import {
   registerEnumType,
 } from "@nestjs/graphql";
 import { CoreEntity } from "src/common/entities/core.entity";
-import { Column, Entity } from "typeorm";
+import { BeforeInsert, Column, Entity } from "typeorm";
+import * as bcrypt from "bcrypt";
+import { InternalServerErrorException } from "@nestjs/common";
+// bcrypt : hash, hash를 확인하는 기능을 제공하는 라이브러리
 
 enum UserRole {
   Owner,
@@ -31,4 +34,16 @@ export class User extends CoreEntity {
   @Column({ type: "enum", enum: UserRole })
   @Field((type) => UserRole)
   role: UserRole;
+
+  // BeforeInsert Decorater : listener의 한 종류 Insert되기 전에 하단에 mark한 method 실행
+  // listener : entity에 무슨일이 생길 때 실행되는 것 (트리거 같은거)
+  @BeforeInsert()
+  async hashPassword(): Promise<void> {
+    try {
+      this.password = await bcrypt.hash(this.password, 10); // 2번째 파라미터 : 몇번 hash하면 되겠는가?
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
+    }
+  }
 }
