@@ -8,6 +8,7 @@ import { Restaurant } from "./restaurants/entities/restaurant.entity";
 import { UsersModule } from "./users/users.module";
 import { CommonModule } from "./common/common.module";
 import { User } from "./users/entities/user.entity";
+import { JwtModule } from "./jwt/jwt.module";
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { User } from "./users/entities/user.entity";
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-    }),
+    }), // Dynamic Module : 설정이 적용된 모듈, 다른 모듈을 반환하는 모듈 <=> Static Module : 어떠한 설정도 적용되있지 않음
+    JwtModule.forRoot(),
     UsersModule,
     CommonModule,
   ],
