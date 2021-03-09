@@ -23,7 +23,7 @@ import { JwtModule } from "./jwt/jwt.module";
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
-        SECRET_KEY: Joi.string().required(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -40,7 +40,9 @@ import { JwtModule } from "./jwt/jwt.module";
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }), // Dynamic Module : 설정이 적용된 모듈, 다른 모듈을 반환하는 모듈 <=> Static Module : 어떠한 설정도 적용되있지 않음
-    JwtModule.forRoot(),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
+    }),
     UsersModule,
     CommonModule,
   ],
