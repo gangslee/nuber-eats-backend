@@ -62,6 +62,10 @@ export class UsersService {
       };
     }
   }
+
+  async findById(id: number): Promise<User> {
+    return this.users.findOne({ id });
+  }
 }
 
 // 항상 모든 비즈니스 로직은 Service 파일의 클래스 내부에 선언한다.
