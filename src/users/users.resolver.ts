@@ -1,4 +1,4 @@
-import { Args, Mutation, Query } from "@nestjs/graphql";
+import { Args, Context, Mutation, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import {
   CreateAccountInput,
@@ -39,5 +39,8 @@ export class UsersResolver {
   }
 
   @Query((returns) => User)
-  me() {}
+  me(@Context() context) {
+    // 상단에 context는 app.module에서 GraphQLModule을 통해 공유된 context
+    console.log(context);
+  }
 }

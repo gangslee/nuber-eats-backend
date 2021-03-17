@@ -43,6 +43,8 @@ import { JwtMiddleware } from "./jwt/jwt,middleware";
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
+      context: ({ req }) => ({ user: req["user"] }),
+      // context에 있는 모든 property들은 모든 resolver로 공유되어 사용 가능, 'user'는 jwtMiddleware에서 http헤더에서 request로 옮겨짐
     }), // Dynamic Module : 설정이 적용된 모듈, 다른 모듈을 반환하는 모듈 <=> Static Module : 어떠한 설정도 적용되있지 않음
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
@@ -57,7 +59,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(JwtMiddleware).forRoutes({
       path: "/graphql",
-      method: RequestMethod.ALL,
+      method: RequestMethod.POST,
     });
   }
 }
