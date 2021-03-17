@@ -9,6 +9,7 @@ import { LoginInput, LoginOutput } from "./dtos/login.dto";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
 import { AuthGuard } from "../auth/auth.guard";
+import { AuthUser } from "src/auth/auth-user.decorator";
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -42,5 +43,7 @@ export class UsersResolver {
 
   @Query((returns) => User)
   @UseGuards(AuthGuard)
-  me() {}
+  me(@AuthUser() authUser: User) {
+    return authUser;
+  }
 }
