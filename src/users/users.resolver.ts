@@ -1,3 +1,4 @@
+import { UseGuards } from "@nestjs/common";
 import { Args, Context, Mutation, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import {
@@ -7,6 +8,7 @@ import {
 import { LoginInput, LoginOutput } from "./dtos/login.dto";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -39,8 +41,6 @@ export class UsersResolver {
   }
 
   @Query((returns) => User)
-  me(@Context() context) {
-    // 상단에 context는 app.module에서 GraphQLModule을 통해 공유된 context
-    console.log(context);
-  }
+  @UseGuards(AuthGuard)
+  me() {}
 }
